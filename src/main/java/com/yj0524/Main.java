@@ -1,14 +1,16 @@
 package com.yj0524;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
-public final class Main extends JavaPlugin {
+public final class Main extends JavaPlugin implements Listener {
 
     public String chatMessage;
 
@@ -16,6 +18,9 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         getLogger().info("Plugin Enabled");
+
+        // Event Listener 등록
+        getServer().getPluginManager().registerEvents(this, this);
 
         // Config.yml 파일 생성
         loadConfig();
@@ -42,10 +47,15 @@ public final class Main extends JavaPlugin {
     }
 
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent e) {
-        Player p = e.getPlayer();
-        String msg = e.getMessage();
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player p = event.getPlayer();
+        String msg = event.getMessage();
         msg = msg.replace("&", "§");
-        e.setFormat(chatMessage.replace("%player%", p.getName()).replace("%message%", msg));
+        String formattedMessage = chatMessage.replace("%player%", p.getName()).replace("%message%", msg).replace("&", "§");
+        for (Player allPlayers : Bukkit.getOnlinePlayers()) {
+            event.setCancelled(true);
+            allPlayers.sendMessage(formattedMessage);
+            Bukkit.getConsoleSender().sendMessage(formattedMessage);
+        }
     }
 }
