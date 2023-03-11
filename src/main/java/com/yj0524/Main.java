@@ -55,7 +55,7 @@ public final class Main extends JavaPlugin implements Listener {
         for (Player allPlayers : Bukkit.getOnlinePlayers()) {
             event.setCancelled(true);
             allPlayers.sendMessage(formattedMessage);
-            Bukkit.getConsoleSender().sendMessage(formattedMessage);
         }
+        Bukkit.getConsoleSender().sendMessage(formattedMessage);
     }
 }
