@@ -38,7 +38,7 @@ public final class Main extends JavaPlugin implements Listener {
     }
 
     private void loadConfig() {
-        // Load chest size from config
+        // Load config
         FileConfiguration config = getConfig();
         chatMessage = config.getString("chatMessage", "&a%player%&r : &b%message%&r");
         // Save config
